@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">loadmore-recyclerview</string>
+
+    <!--加载更多提示语-->
+    <string name="loadmore_loading">加载中</string>
+    <string name="loadmore_no_more">已加载到底部</string>
+    <string name="load_more_error">加载出错，点击重试</string>
+    <!--加载更多提示语-->
+</resources>
