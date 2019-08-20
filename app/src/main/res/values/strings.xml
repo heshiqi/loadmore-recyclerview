@@ -6,4 +6,10 @@
     <string name="loadmore_no_more">已加载到底部</string>
     <string name="load_more_error">加载出错，点击重试</string>
     <!--加载更多提示语-->
+
+    <string name="pull_to_refresh_pull_label">  下拉刷新…</string>
+    <string name="pull_to_refresh_refreshing_label">  刷新中…</string>
+    <string name="pull_to_refresh_release_label">松开刷新</string>
+    <string name="last_update">上次刷新:</string>
 </resources>
+
