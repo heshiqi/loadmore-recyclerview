@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="view_holder_key" type="id" />
+    <item name="view_holder_position_key" type="id" />
+    <item name="attention_refresh_recycleview_id" type="id" />
+    <item name="attention_refresh_headerview_id" type="id" />
+    <item name="card_item_type" type="id" />
+</resources>

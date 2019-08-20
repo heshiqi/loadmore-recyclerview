@@ -1,6 +1,7 @@
 package com.heshiqi.widget.loadmore;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +9,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.heshiqi.widget.adapter.BaseHeaderFooterAdapter;
+import com.heshiqi.widget.R;
+import com.heshiqi.widget.adapter.viewholder.BaseViewHolder;
 
 
 /**
@@ -53,7 +55,7 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
      * 开启加载更多功能 在{@link #setAdapter(BaseHeaderFooterAdapter)}之前调用
      */
     public void triggerLoadMore() {
-        if(mAdapter!=null){
+        if (mAdapter != null) {
             new RuntimeException("在调用setAdapter(BaseHeaderFooterAdapter)之前 调用此方法");
         }
         loadMoreStatus = new LoadMoreStatus();
@@ -160,7 +162,7 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
          */
         if (bottomEdgeHit) {
             if (mIsLoadMoreWidgetEnabled) {
-                /**auto activate loadAutoHeight more**/
+                /**auto activate load more**/
                 if (!automaticLoadMoreEnabled) {
                     if (onLoadMoreListener != null) {
                         onLoadMoreListener.loadMore(mAdapter.getItemCount(), lastVisibleItemPosition);
@@ -198,7 +200,7 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
                 if (!isLoadMoreEnabled()) {
                     enableLoadmore();
                 }
-                if(mAdapter != null && loadMoreStatus != null) {
+                if (mAdapter != null && loadMoreStatus != null) {
                     loadMoreStatus.loadMoreStatus = LAOD_MORE_STATUS.LOADING;
                     mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
                 }
@@ -253,10 +255,19 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
         return min;
     }
 
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        try {
+            super.onRestoreInstanceState(state);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 设置加载更多时间回调
      *
-     * @param onLoadMoreListener loadAutoHeight listen
+     * @param onLoadMoreListener load listen
      */
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
@@ -268,6 +279,16 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
             setLoadMoreStatus(LAOD_MORE_STATUS.LOADING);
             onLoadMoreListener.loadMore(mAdapter.getItemCount(), lastVisibleItemPosition);
         }
+    }
+
+    // TODO: 11/4/18 第二次刷新后再下划加载更多。其它标识位经测试后可都复位。
+    public void reset() {
+//        mFirstVisibleItem = 0;
+        previousTotal = 0;
+//        mTotalItemCount = 0;
+//        mFirstVisibleItem = 0;
+//        lastVisibleItemPosition=0;
+//        automaticLoadMoreEnabled = false;
     }
 
     /**
@@ -284,7 +305,7 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
     }
 
     public static final class LoadMoreStatus {
-        public LAOD_MORE_STATUS loadMoreStatus= LAOD_MORE_STATUS.LOADING_HIDE;
+        public LAOD_MORE_STATUS loadMoreStatus = LAOD_MORE_STATUS.LOADING_HIDE;
     }
 
     public enum LAOD_MORE_STATUS {
@@ -293,5 +314,42 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
         LOADING_NO_MORE,
         LOADING_HIDE
 
+    }
+
+    public static class LoadMoreViewHolder extends BaseViewHolder {
+
+        private RefreshableFooterView refreshableFooterView;
+
+        public LoadMoreViewHolder(View itemView, Context context) {
+            super(context,itemView);
+            itemView.setTag(R.id.card_item_type,"888");
+            refreshableFooterView = (RefreshableFooterView) itemView.findViewById(R.id.load_more_view);
+        }
+
+        public void render(LoadMoreStatus loadMoreStatus, OnClickListener onClickListener) {
+            refreshableFooterView.setOnClickListener(onClickListener);
+            switch (loadMoreStatus.loadMoreStatus) {
+                case LOADING:
+                    refreshableFooterView.onState(RefreshableFooterView.FooterState.STATE_LOADING);
+                    refreshableFooterView.setEnabled(false);
+                    break;
+                case LOADING_NO_MORE:
+                    refreshableFooterView.onState(RefreshableFooterView.FooterState.STATE_LOAD_NO_MORE);
+                    refreshableFooterView.setEnabled(false);
+                    break;
+                case LOADING_ERROR:
+                    refreshableFooterView.onState(RefreshableFooterView.FooterState.STATE_LOAD_ERROR);
+                    refreshableFooterView.setEnabled(true);
+                    break;
+                case LOADING_HIDE:
+                    refreshableFooterView.onState(RefreshableFooterView.FooterState.STATE_LOAD_HIDE);
+                    refreshableFooterView.setEnabled(false);
+                    break;
+                default:
+                    refreshableFooterView.onState(RefreshableFooterView.FooterState.STATE_LOAD_HIDE);
+                    refreshableFooterView.setEnabled(false);
+                    break;
+            }
+        }
     }
 }

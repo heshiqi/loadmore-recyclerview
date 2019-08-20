@@ -5,16 +5,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import com.heshiqi.widget.adapter.BaseHeaderFooterAdapter;
 import com.heshiqi.widget.adapter.LoadMoreAdapter;
 import com.heshiqi.widget.core.contract.MainContract;
 import com.heshiqi.widget.core.presenter.MainPresenter;
 import com.heshiqi.widget.core.repository.MainRepository;
 import com.heshiqi.widget.entity.MainEntity;
+import com.heshiqi.widget.loadmore.BaseHeaderFooterAdapter;
 import com.heshiqi.widget.loadmore.LoadMoreRecyclerView;
 
 import java.util.List;

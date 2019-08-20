@@ -1,15 +1,17 @@
-package com.heshiqi.widget.adapter;
+package com.heshiqi.widget.loadmore;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.heshiqi.widget.R;
 
 
 /**
  * Created by heshiqi on 16/12/2.
  */
 
-public abstract class BaseHeaderFooterAdapter<VH extends RecyclerView.ViewHolder, H/*头布局的数据类泛型*/, F/*尾布局的数据类泛型*/> extends RecyclerView.Adapter<VH> {
+public abstract class BaseHeaderFooterAdapter<VH extends RecyclerView.ViewHolder, H/*头布局的数据类泛型*/, F/*尾布局的数据类泛型*/> extends RecyclerView.Adapter<VH> implements View.OnClickListener {
 
     /**
      * 头部布局类型
@@ -115,14 +117,8 @@ public abstract class BaseHeaderFooterAdapter<VH extends RecyclerView.ViewHolder
             onBindFooterViewHolder(holder, position);
         } else {
             onBindItemViewHolder(holder, position-getHeaderCount());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onItemClicked(holder.itemView, holder.getAdapterPosition() - getHeaderCount());
-                    }
-                }
-            });
+            holder.itemView.setTag(R.id.view_holder_position_key,holder.getAdapterPosition() - getHeaderCount());
+            holder.itemView.setOnClickListener(this);
         }
     }
 
@@ -186,12 +182,11 @@ public abstract class BaseHeaderFooterAdapter<VH extends RecyclerView.ViewHolder
         return hasFooter() && position == last_item;
     }
 
-
-    protected boolean hasFooter() {
+    public boolean hasFooter() {
         return getFooter() != null;
     }
 
-    protected boolean hasHeader() {
+    public boolean hasHeader() {
         return getHeader() != null;
     }
 
@@ -215,4 +210,16 @@ public abstract class BaseHeaderFooterAdapter<VH extends RecyclerView.ViewHolder
         return hasHeader() ? 1 : 0;
     }
 
+    @Override
+    public void onClick(View view) {
+        if(onItemClickListener==null){
+            return;
+        }
+        Object obj = view.getTag(R.id.view_holder_position_key);
+        int position = 0;
+        if (obj instanceof Integer) {
+            position = (int) obj;
+        }
+        onItemClickListener.onItemClicked(view,position);
+    }
 }

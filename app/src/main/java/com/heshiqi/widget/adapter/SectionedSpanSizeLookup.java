@@ -2,6 +2,8 @@ package com.heshiqi.widget.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
 
+import com.heshiqi.widget.loadmore.BaseHeaderFooterAdapter;
+
 
 public class SectionedSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
 

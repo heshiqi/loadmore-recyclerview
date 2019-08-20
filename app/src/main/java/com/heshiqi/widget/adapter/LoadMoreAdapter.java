@@ -12,8 +12,8 @@ import com.heshiqi.widget.R;
 import com.heshiqi.widget.adapter.viewholder.BaseViewHolder;
 import com.heshiqi.widget.entity.HeaderEntity;
 import com.heshiqi.widget.entity.MainEntity;
+import com.heshiqi.widget.loadmore.BaseHeaderFooterAdapter;
 import com.heshiqi.widget.loadmore.LoadMoreRecyclerView;
-import com.heshiqi.widget.loadmore.LoadMoreViewHolder;
 
 
 /**
@@ -47,7 +47,7 @@ public class LoadMoreAdapter extends BaseHeaderFooterAdapter<BaseViewHolder, Hea
     @Override
     protected BaseViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.item_layout_load_more, parent, false);
-        return new LoadMoreViewHolder(itemView, mContext);
+        return new LoadMoreRecyclerView.LoadMoreViewHolder(itemView, mContext);
     }
 
     @Override
@@ -74,10 +74,10 @@ public class LoadMoreAdapter extends BaseHeaderFooterAdapter<BaseViewHolder, Hea
 
     @Override
     protected void onBindFooterViewHolder(BaseViewHolder holder, int position) {
-        if (holder instanceof LoadMoreViewHolder) {
+        if (holder instanceof LoadMoreRecyclerView.LoadMoreViewHolder) {
             LoadMoreRecyclerView.LoadMoreStatus loadMoreStatus = getFooter();
             if (loadMoreStatus != null) {
-                final LoadMoreViewHolder moreViewHolder = (LoadMoreViewHolder) holder;
+                final LoadMoreRecyclerView.LoadMoreViewHolder moreViewHolder = (LoadMoreRecyclerView.LoadMoreViewHolder) holder;
                 moreViewHolder.render(loadMoreStatus, onFooterViewClickListener);
             }
         }
